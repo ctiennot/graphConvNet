@@ -1,0 +1,7 @@
+1/ Partie "Recursive formulation for fast filtering": pourquoi ne pas faire la recursion sur les (L^k)x au lieu d'introduire les poly de chebitchev?
+
+2/ Tensorflow fera-t-il la backpropagation pour nous?
+
+3/ ??
+
+4/ Peut-on faire du spectral clustering à la place du coarsening?
