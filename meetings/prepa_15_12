@@ -7,3 +7,7 @@
 4/ Peut-on faire du spectral clustering à la place du coarsening?
 
 5/ Dans Graclus, dans quel ordre processe-t-on les noeuds, random?
+
+6/ Maxpooling: comment tensorflow va réussir à deriver les maxs??
+
+7/ Laplacien combinatoire ou normalisé?
