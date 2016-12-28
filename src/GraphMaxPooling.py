@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
 
 
 class GraphMaxPooling:
@@ -186,13 +187,13 @@ class GraphMaxPooling:
     def add_all_virtuals_nodes(list_all_mappings):
         """ Add virtual nodes toat the end of all mappings. all_mappings
         is a list of arrays"""
-        all_mappings = list_all_mappings.copy()
+        all_mappings = copy.copy(list_all_mappings)
         for i in range(len(all_mappings) - 1, -1, -1):
             # the trick is to think of propagating the virtual nodes
             # e.g. if a virtual nodes is create for all_mappings[i] then
             # two virtual nodes
             # pointing to it must be added to all_mappings[i-1]
-            mapping_plus_virtuals = all_mappings[i].copy()
+            mapping_plus_virtuals = copy.copy(all_mappings[i])
             # now we look for loners, but each time we find one, we don't
             # forget to add 2 virtual nodes
             # to all_mappings[i-1]
@@ -218,7 +219,7 @@ class GraphMaxPooling:
                         #    node_just_added = len(mapping_plus_virtuals) - 1
                         #    all_mappings[i-1] = np.append(all_mappings[i-1],
                         # [node_just_added]*2)
-            all_mappings[i] = mapping_plus_virtuals.copy()
+            all_mappings[i] = copy.copy(mapping_plus_virtuals)
         # return list of augmented mappings
         return all_mappings
 
@@ -245,7 +246,7 @@ class GraphMaxPooling:
     def get_all_mappings(W, n):
         """ Coarsen n times and store all mappings for one graph to the next
         one in a list"""
-        current_W = W.copy()
+        current_W = copy.copy(W)
         all_mappings = []  # to keep all mapping arrays
         for i in range(n):
             current_W, mapping = GraphMaxPooling.one_coarsening(current_W)
