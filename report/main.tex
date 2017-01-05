@@ -1,0 +1,80 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+% \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading nips_2016
+%
+% to avoid loading the natbib package, add option nonatbib:
+% \usepackage[nonatbib]{nips_2016}
+
+\usepackage[final]{nips_2016}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+% \usepackage[final]{nips_2016}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{subfigure}
+\usepackage{svg}
+\usepackage[ruled,vlined]{algorithm2e}
+
+\usepackage{graphicx}
+
+% Macros
+\newcommand{\R}{\mathbb{R}}
+
+
+
+\title{Graphs for Machine Learning Project (MVA)\\Convolutional Neural Network on Graphs}
+
+% The \author macro works with any number of authors. There are two
+% commands used to separate the names and addresses of multiple
+% authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to
+% break the lines. Using \AND forces a line break at that point. So,
+% if LaTeX puts 3 of 4 authors names on the first line, and the last
+% on the second line, try using \AND instead of \And before the third
+% author name.
+
+
+\author{Alexandre~P\'er\'e \And Cl\'ement~Tiennot}
+
+\begin{document}
+% \nipsfinalcopy is no longer used
+
+\maketitle
+
+\begin{abstract}
+    In this report, we present our understanding of the paper "Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering" \cite{defferrard2016convolutional}. We both summarize the approach developed in the authors' work and provide an implementation in the \texttt{python} langage. Our implementation makes use of the \texttt{Tensorflow} package \cite{tensorflow2015-whitepaper} which allows automatic computation of gradients and thus efficient optimization.
+\end{abstract}
+
+
+
+%\input{0_leftovers.tex}  % some stuff that we will need to put somewhere later
+
+\input{1_introduction.tex}
+
+\input{2_quick_graph_theory.tex} 
+
+\input{3_spectral_filter_for_graph.tex}
+
+\input{4_pooling.tex}
+
+\input{5_learning_and_CNN.tex}
+
+\input{6_conclusion}
+
+%\newpage
+
+\bibliographystyle{abbrv}
+\bibliography{biblio}
+
+\end{document}
+

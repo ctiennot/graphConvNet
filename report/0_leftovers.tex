@@ -1,0 +1,26 @@
+\section*{Pseudo-Algorithms}
+
+We need to implement the following methods:
+\begin{itemize}
+    \item Convolution of a signal on a graph with parameter $\theta$
+    \item Graph coarsening of a graph
+    \item Computation of gradient w.r.t. filter parameters
+    \item Backpropagation of gradient through coarsening operation
+\end{itemize}
+
+
+\begin{algorithm}[ht]
+ \KwData{input signal $x \in \R^d$, filter parameters $\theta \in \R^K$ , Graph Laplacian $L_\mathcal{G} \in \R^{d \times d}$}
+ \KwResult{filtered signal $y \in \R^d $}
+ 
+ \textbf{Initialization:}\\
+    $\tilde{L} = 2 L / \lambda_{max} - I_d$ \\
+    $\bar{x}_0 = x$ \\
+    $\bar{x}_1 = \tilde{L}x$
+ 
+ \For{$k=2$ to $K-1$}{
+    $\bar{x}_k=2\tilde{L}\bar{x}_{k-1} - \bar{x}_{k-2}$
+ }
+ \textbf{Return:} $y = [\bar{x}_0, \ldots, \bar{x}_{K-1}] \theta$
+ \caption{Fast localized spectral filter}
+\end{algorithm}

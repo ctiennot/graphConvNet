@@ -1,0 +1,19 @@
+\section*{Introduction}
+
+Lately, Convolutional Neural Networks (CNN), have shown outstanding performances in classification tasks over a large range of data including images, audio and language. Those techniques are rapidly spreading across the scientific community, leading to unprecedented advances in different fields. Even though those performances are quite promising for future applications, the generalization of CNN to discrete signals over arbitrary (non-euclidean) structure is still an open problem. Indeed, it is worth noting that the data on which CNN give their best performances share an important common property: they all can be represented as contiguous data over regular lattices, like regular 2D arrays for images, or regular 1D arrays for sequences. 
+
+The convolution operation that confers their performances to CNN can be seen from two different viewpoints:
+\begin{itemize}
+    \item The convolution operation is equivalent to a multiplication in the Fourier domain. This definition is not the most intuitive and is, to our knowledge, rarely used in practical implementations due to the cost of transferring data to the complex Fourier domain. 
+    \item The convolution operation is also equivalent to a classic filtering with a small sliding window, scanning and filtering the whole input signal (in the case of images, the filter can be a small 3x3 filter called kernel). This definition is much meaningful to understand the way CNN behaves, and is most often used for implementation.
+\end{itemize}
+
+From these two definitions, we understand that CNN performance relies heavily on the euclidean structure of the data, and the idea of locality and neighbourhood. Thus, it becomes clear that CNN can't be easily applied to data presenting less structure than images or sequences, for example in the case of signals defined over sensor fields, or trees.
+
+The main question addressed by the paper is hence: How do we apply CNN to more general discrete signals over non-euclidean structures where straightforward convolution operation can not be defined. Graphs structure being the most general discrete structure we can define signals on, this question extends to: How do we apply CNN to signals defined over graphical structures? 
+
+In order to address this issue, we will have to rely on the Fourier Domain multiplication point of view. As we will see, one can use a spectral approach to define Fourier Transform over graphs, along with convolutions and filtering \cite{bruna2013spectral}. By choosing a specific filter parametrization (that uses the graph Laplacian) we can furthermore build localized and fast filters with performances comparable to classic CNN.
+
+The Graph CNN implementation proposed in the paper is made possible by theoretic tools provided by the emerging field of Graph Signal Processing (GSP). This new field aims at studying discrete signals over non-euclidean structures, and is rapidly gaining attraction in the signal processing community. A complete introduction to the field can be found in \cite{Shuman2013}.
+
+

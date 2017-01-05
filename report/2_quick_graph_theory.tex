@@ -1,0 +1,21 @@
+\section{A bit of Graph Theory}
+
+A weighted graph is defined as a tuple $(\mathcal{V,E,W})$, where $\mathcal{V}$ is a set of elements called Vertices (or Nodes), $\mathcal{E}$ is a set of couples of $\mathcal{V}$ elements called Edges (or Arcs), and $\mathcal{W: E}\rightarrow \mathbb{R}$ is an application that assigns weights $w$ to all edges. 
+
+Most of the time, the application $\mathcal{W}$ is represented by a \emph{Weight matrix} $W$, which, if we consider a $n$ nodes graph, is an $n\times n$ matrix. If an edge exists between two nodes $i,j \in \mathcal{V}$, then $w_{ij}\neq 0$, and if no edge exists then $w_{ij}=0$. A graph can be directed or undirected. In our case we will exclusively use undirected graphs, meaning that the weights matrix is always symmetric. The \emph{Degree} of a node $i$ is defined as the sum of the weights related to it:
+\begin{equation}
+    d_i = \sum_{k\in\mathcal{V}}w_{ik}    
+\end{equation}
+The \emph{Degree matrix} $D$ of a graph is a $n\times n$ diagonal matrix containing the degrees of all nodes $i$.
+
+With these definitions we can introduce one of the most interesting tools used in graphs for machine learning, the graph \emph{Laplacian matrix}, which is defined as:
+\begin{equation}
+    L = D -W
+\end{equation}
+This matrix is a fruitful representation of a graph that has a lot of interesting properties. In the case of Graph Fourier Transform that we will define in the next part, a slightly different definition of the Laplacian is used, i.e. the symmetric normalized Laplacian:
+\begin{equation}
+    L_{sym} = D^{-1/2}LD^{-1/2}
+\end{equation}
+Other definitions of the Laplacian can be found in the literature, having each different and interesting properties that we will not discuss here. For more insights on graph Laplacian and spectral clustering, one can refer to \cite{VonLuxburg2007}.
+
+Last but not least, a discrete signal $s$ over a graph $\mathcal{G}$ is defined as an application $s:\mathcal{V}\rightarrow \mathbb{R}$, that maps a real number to each graph nodes. In what follows, we will refer to such discrete signals over graphs, merely as signals.
