@@ -2,7 +2,7 @@ import numpy
 import os, struct
 from array import array as pyarray
 
-def load_mnist(dataset="training", digits=numpy.arange(10), path="mnist"):
+def load_mnist(dataset="training", digits=numpy.arange(10), path="data/mnist"):
     """"  
     Mnist loading methods from David Larson. Can be checked out at: http://g.sweyla.com/blog/2012/mnist-numpy/a
     """
