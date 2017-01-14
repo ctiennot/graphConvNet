@@ -22,34 +22,55 @@ class GraphConv:
         :param F: number of filters
         :param L: Laplacian for the current graph
         """
-        lambda_max = max(
-            np.linalg.eig(L)[0])  # maximum eigenvalue of the Laplacian
-        lambda_max = lambda_max.real  # avoid false imaginary part
+        if F == 0 or K == 0 or K is None or F is None or L is None:
+            # the layer doesn't apply filtering but can be used to just maxpool
+            # or unpool
+            self.K = None
+            self.F = None
+            self.L_tilde = None
+            self.theta = None
 
-        # Compute normalized Laplacian
-        self.L_tilde = 2 * L / lambda_max - np.eye(L.shape[0])
-        self.L_tilde = np.array(self.L_tilde, dtype=np.float32)
-        self.M = self.L_tilde.shape[0]  # signal size
+            _, M_, F_ = input.get_shape()  # previous layer number of filters
+            # and signal size
+            F_, M_ = int(F_), int(M_)
 
-        self.K = K  # number of coef / Polynomial Degree
-        self.F = F  # number of filters
+            # the output is just the input
+            self.output = input
+            self.depth = F_  # same depth as input
+            self.M = M_  # same signal size as input
 
-        # Filter parameters
-        self.theta = weight_variable([self.K, self.F])  # K x F
-        self.b = bias_variable([1, 1, self.F])  # 1 x 1 x F
+        else:
+            lambda_max = max(
+                np.linalg.eig(L)[0])  # maximum eigenvalue of the Laplacian
+            lambda_max = lambda_max.real  # avoid false imaginary part
 
-        # Perform symbolic operations
-        _, _, F_ = input.get_shape()  # previous layer number of filters
-        F_ = int(F_)
+            # Compute normalized Laplacian
+            self.L_tilde = 2 * L / lambda_max - np.eye(L.shape[0])
+            self.L_tilde = np.array(self.L_tilde, dtype=np.float32)
+            self.M = self.L_tilde.shape[0]  # signal size
 
-        X_bar = tf.reshape(input, [-1, self.M])  # NF_ x M
-        X_bar = self._chebyshev_recursion(X_bar)  # NF_ x M x K
+            self.K = K  # number of coef / Polynomial Degree
+            self.F = F  # number of filters
 
-        y = self._apply_filtering(X_bar) # NF_ x M x F
+            # Filter parameters
+            self.theta = weight_variable([self.K, self.F])  # K x F
+            self.b = bias_variable([1, 1, self.F])  # 1 x 1 x F
 
-        self.output = tf.nn.relu(y + self.b)  # NF_ x M x F
+            # Perform symbolic operations
+            _, _, F_ = input.get_shape()  # previous layer number of filters
+            F_ = int(F_)
 
-        self.output = tf.reshape(self.output, [-1, self.M, F_*self.F])
+            X_bar = tf.reshape(input, [-1, self.M])  # NF_ x M
+            X_bar = self._chebyshev_recursion(X_bar)  # NF_ x M x K
+
+            y = self._apply_filtering(X_bar) # NF_ x M x F
+
+            self.output = tf.nn.relu(y + self.b)  # NF_ x M x F
+
+            self.output = tf.reshape(self.output, [-1, self.M, F_*self.F])
+
+            # store depth (different for the number of filters for this layer)
+            self.depth = F_*self.F
 
     def _chebyshev_recursion(self, X):
         # return N x M x K
@@ -86,11 +107,29 @@ class GraphConv:
         return y
 
     def max_pool(self):
+        """ Perform 1d-max_pooling after the convlayer"""
         augmented = tf.expand_dims(self.output, 0)
         pooled = tf.nn.max_pool(augmented, ksize=[1, 1, 2, 1],
                                   strides=[1, 1, 2, 1], padding='SAME')
         pooled = tf.squeeze(pooled, [0])
         self.output = pooled
+
+        # update signal size
+        self.M /= 2
+
+    def un_pool(self):
+        """
+        :return: Unpooling on current layer output and so double the 1-d signal
+        size by duplicating all nodes
+        """
+        self.output = tf.reshape(self.output,
+                         [-1, self.M, 1, self.depth])  # add 1 dimension
+        self.output = tf.tile(self.output, [1, 1, 2, 1])  # duplicate signal
+        # column
+        self.output = tf.reshape(self.output, [-1, 2 * self.M, self.depth])
+
+        # update signal size
+        self.M *= 2
 
 
 class Dense:
